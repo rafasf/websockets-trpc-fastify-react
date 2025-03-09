@@ -27,7 +27,7 @@ For example:
 If an update is sent to the wrong instance, some clients might miss it. This
 project provides a solution to ensure that every user gets the update.
 
-> **NOTE**
+> [!NOTE]
 >
 > _The architecture and technology attempts to emulate a specific environment
 > where this was necessary._

@@ -1,0 +1,53 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: ./app/client/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - VITE_BFF_URL=http://server
+      - VITE_BFF_WS_URL=ws://server
+    depends_on:
+      - load-balancer
+
+  bff-instance:
+    build:
+      context: .
+      dockerfile: ./app/server/Dockerfile
+    expose:
+      - "3000"
+    environment:
+      - VALKEY_URL=redis://valkey:6379
+      - SVC_USERS_URL=https://jsonplaceholder.typicode.com
+      - BEHIND_PROXY=true
+    depends_on:
+      - valkey
+    deploy:
+      mode: replicated
+      replicas: 3
+
+  load-balancer:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./app/server/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - bff-instance
+
+  valkey:
+    image: wodby/valkey:latest
+    ports:
+      - "6379:6379"
+
+  background-updates:
+    image: oven/bun:latest
+    build:
+      context: .
+      dockerfile: ./app/server/bu.Dockerfile
+    environment:
+      - VALKEY_URL=redis://valkey:6379
+    depends_on:
+      - valkey
+      - load-balancer

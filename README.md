@@ -106,14 +106,18 @@ to the `upstream` section. [Here's the available options][nginx-sticky].
 
 ## See it in action :eyes:
 
-`sh docker compose up `
+```sh
+docker compose up
+```
 
 Then open http://localhost:3001 in one or more browser windows. The app will
 show which server instance sent the update.
 
 ### Development mode
 
-`sh bun dev `
+```sh
+bun dev
+```
 
 This is a simple playground. Both
 [env.client.ts](./app/client/src/infra/env.client.ts) and
@@ -136,4 +140,3 @@ requirements! 😊
 [valkey]: https://github.com/valkey-io/valkey
 [node-ee]: https://nodejs.org/en/learn/asynchronous-work/the-nodejs-event-emitter
 [nginx-sticky]: https://nginx.org/en/docs/http/ngx_http_upstream_module.html#sticky
-
